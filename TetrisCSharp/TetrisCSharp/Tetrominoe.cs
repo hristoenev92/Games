@@ -35,7 +35,6 @@ namespace TetrisCSharp
                 }
 
             }
-            Program.drawBorder();
             for (int i = 0; i < shape.GetLength(0); i++)// draw next piece
             {
                 for (int j = 0; j < shape.GetLength(1); j++)

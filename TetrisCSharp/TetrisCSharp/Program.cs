@@ -32,15 +32,18 @@ namespace TetrisCSharp
             sp.PlayLooping();
 
             Console.CursorVisible = false;
-            Console.SetCursorPosition(8, 9);
-            Console.WriteLine("Press any key to start");
-            Console.SetCursorPosition(11, 5);
-            Console.WriteLine("Tab for rotation");
+            Console.BufferWidth = Console.WindowWidth = 41;
+            Console.BufferHeight = Console.WindowHeight = 30;
+
+            Console.SetCursorPosition(9, 5);
+            Console.WriteLine("Up Arrow for rotation");
             Console.SetCursorPosition(8, 7);
             Console.WriteLine("Spacebar to drop Piece");
-
+            Console.SetCursorPosition(8, 9);
+            Console.WriteLine("Press any key to start");
             Console.ReadKey(true);
             Console.Clear();
+
             timer.Start();
             dropTimer.Start();
             long time = timer.ElapsedMilliseconds;
@@ -80,11 +83,20 @@ namespace TetrisCSharp
             }
             else return;
         }
-        
+
+        private static void ResetWindowSize()
+        {
+            Console.CursorVisible = false;
+            Console.BufferWidth = Console.WindowWidth = 41;
+            Console.BufferHeight = Console.WindowHeight = 30;
+        }
+
         private static void Update()
         {
             while (true)
             {
+                ResetWindowSize();
+                drawBorder();
                 dropTime = (int)dropTimer.ElapsedMilliseconds;
                 if (dropTime > dropRate)
                 {
@@ -188,6 +200,7 @@ namespace TetrisCSharp
         }
         private static void Input()
         {
+            Console.ForegroundColor = ConsoleColor.Black;
             if (Console.KeyAvailable)
             {
                 key = Console.ReadKey();
@@ -223,7 +236,7 @@ namespace TetrisCSharp
                     tet.Drop();
                 }
             }
-            if (key.Key == ConsoleKey.Tab && isKeyPressed)
+            if (key.Key == ConsoleKey.UpArrow && isKeyPressed)
             {
                 tet.Rotate();
                 tet.Update();
