@@ -69,7 +69,7 @@ namespace Snake
                 Console.Clear();
                 Main();
             }
-            else if (key.Key == ConsoleKey.N)
+            else 
             {
                 return;
             }
@@ -247,7 +247,7 @@ namespace Snake
 
         public class Rocks
         {
-            char rock = 'G';
+            char rock = 'R';
             public Coords rockCoords;
             public List<Coords> allRocks;
             int timeSinceLastSpawn = Environment.TickCount;
