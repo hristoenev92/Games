@@ -5,3 +5,10 @@ c:\users\hrist\documents\visual studio 2017\Projects\Hangman\Hangman\obj\Debug\H
 c:\users\hrist\documents\visual studio 2017\Projects\Hangman\Hangman\obj\Debug\Hangman.csproj.CoreCompileInputs.cache
 c:\users\hrist\documents\visual studio 2017\Projects\Hangman\Hangman\obj\Debug\Hangman.exe
 c:\users\hrist\documents\visual studio 2017\Projects\Hangman\Hangman\obj\Debug\Hangman.pdb
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\bin\Debug\Hangman.exe.config
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\bin\Debug\Hangman.exe
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\bin\Debug\Hangman.pdb
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\obj\Debug\Hangman.csprojAssemblyReference.cache
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\obj\Debug\Hangman.csproj.CoreCompileInputs.cache
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\obj\Debug\Hangman.exe
+C:\Users\hrist\Documents\Visual Studio 2017\Projects\Games\Hangman\Hangman\obj\Debug\Hangman.pdb

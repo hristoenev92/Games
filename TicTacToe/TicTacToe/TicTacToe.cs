@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace TicTacToe
+﻿namespace TicTacToe
 {
-    class Program
-    {
-        public static List<Position> allPositions = new List<Position>
-        {
-            new Position(0, new Coords(0,0)),
-            new Position(1, new Coords(2,2)),
-            new Position(2, new Coords(9,2)),
-            new Position(3, new Coords(16,2)),
-            new Position(4, new Coords(2,5)),
-            new Position(5, new Coords(9,5)),
-            new Position(6, new Coords(16,5)),
-            new Position(7, new Coords(2,8)),
-            new Position(8, new Coords(9,8)),
-            new Position(9, new Coords(16,8))
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
 
+    public class TicTacToe
+    {
+        private static List<Position> allPositions = new List<Position>
+        {
+            new Position(0, new Coords(0, 0)),
+            new Position(1, new Coords(2, 2)),
+            new Position(2, new Coords(9, 2)),
+            new Position(3, new Coords(16, 2)),
+            new Position(4, new Coords(2, 5)),
+            new Position(5, new Coords(9, 5)),
+            new Position(6, new Coords(16, 5)),
+            new Position(7, new Coords(2, 8)),
+            new Position(8, new Coords(9, 8)),
+            new Position(9, new Coords(16, 8))
         };
-        public static bool isGameOver = false;
+
+        private static bool isGameOver = false;
 
         static void Main()
         {
@@ -33,7 +31,7 @@ namespace TicTacToe
 
             int turn = 1;
             Position currentInput;
-            string result = "";
+            string result = string.Empty;
 
             WelcomeMessage();
             DrawBoarder();
@@ -42,7 +40,7 @@ namespace TicTacToe
             {
                 ResetWindowSize();
                 currentInput = Input();
-                //for wrong input
+                // for wrong input
                 if (currentInput.position == 0)
                 {
                     Console.SetCursorPosition(1, 13);
@@ -52,18 +50,19 @@ namespace TicTacToe
                     Console.WriteLine("                                                    ");
                     continue;
                 }
+
                 turn = Update(turn, currentInput);
                 result = EndGame();
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1500);
             Console.Clear();
             Console.SetCursorPosition(20, 6);
             Console.WriteLine("GAME OVER!");
             Console.SetCursorPosition(15, 8);
             Console.WriteLine(result);
 
-            //for replay
+            // for replay
             Console.SetCursorPosition(17, 10);
             Console.WriteLine("Replay ? (Y / N)");
             ConsoleKeyInfo key = Console.ReadKey();
@@ -74,8 +73,9 @@ namespace TicTacToe
                 foreach (var position in allPositions)
                 {
                     position.isEmpty = true;
-                    position.type = "";
+                    position.type = string.Empty;
                 }
+
                 GC.Collect();
                 Console.Clear();
                 Main();
@@ -83,32 +83,6 @@ namespace TicTacToe
             else
             {
                 return;
-            }
-        }
-
-        public class Coords
-        {
-            public int x;
-            public int y;
-
-            public Coords(int X, int Y)
-            {
-                this.x = X;
-                this.y = Y;
-            }
-        }
-
-        public class Position
-        {
-            public int position;
-            public bool isEmpty = true;
-            public string type = "";
-            public Coords posCoords;
-
-            public Position(int pos, Coords coords)
-            {
-                this.position = pos;
-                posCoords = coords;
             }
         }
 
@@ -154,6 +128,7 @@ namespace TicTacToe
                 Console.SetCursorPosition(i, 10);
                 Console.Write("─");
             }
+
             for (int i = 2; i < 10; i++)
             {
                 Console.SetCursorPosition(1, i);
@@ -165,6 +140,7 @@ namespace TicTacToe
                 Console.SetCursorPosition(22, i);
                 Console.Write("│");
             }
+
             Console.SetCursorPosition(2, 2);
             Console.WriteLine("1");
             Console.SetCursorPosition(9, 2);
@@ -189,7 +165,6 @@ namespace TicTacToe
 
         private static int Update(int turn, Position position)
         {
-
             if (position.isEmpty)
             {
                 if (turn % 2 == 0)
@@ -219,6 +194,7 @@ namespace TicTacToe
                 Console.SetCursorPosition(1, 13);
                 Console.WriteLine("                                           ");
             }
+
             return turn;
         }
 
@@ -242,7 +218,7 @@ namespace TicTacToe
             Console.ResetColor();
         }
 
-        static Position Input()
+        private static Position Input()
         {
             Console.SetCursorPosition(25, 3);
             Console.ForegroundColor = ConsoleColor.Black;
@@ -254,38 +230,47 @@ namespace TicTacToe
                     {
                         return allPositions[1];
                     }
+
                 case ConsoleKey.D2:
                     {
                         return allPositions[2];
                     }
+
                 case ConsoleKey.D3:
                     {
                         return allPositions[3];
                     }
+
                 case ConsoleKey.D4:
                     {
                         return allPositions[4];
                     }
+
                 case ConsoleKey.D5:
                     {
                         return allPositions[5];
                     }
+
                 case ConsoleKey.D6:
                     {
                         return allPositions[6];
                     }
+
                 case ConsoleKey.D7:
                     {
                         return allPositions[7];
                     }
+
                 case ConsoleKey.D8:
                     {
                         return allPositions[8];
                     }
+
                 case ConsoleKey.D9:
                     {
                         return allPositions[9];
                     }
+
                 default:
                     {
                         return allPositions[0];
@@ -316,6 +301,7 @@ namespace TicTacToe
                     return player2;
                 }
             }
+
             if (Os.Count > 2)
             {
                 if ((Os.Contains(allPositions[1]) && Os.Contains(allPositions[2]) && Os.Contains(allPositions[3])) ||
@@ -337,7 +323,34 @@ namespace TicTacToe
                 isGameOver = true;
                 return draw;
             }
-            return "";
+
+            return string.Empty;
+        }
+
+        private class Coords
+        {
+            public int x;
+            public int y;
+
+            public Coords(int X, int Y)
+            {
+                this.x = X;
+                this.y = Y;
+            }
+        }
+
+        private class Position
+        {
+            public int position;
+            public bool isEmpty = true;
+            public string type = string.Empty;
+            public Coords posCoords;
+
+            public Position(int pos, Coords coords)
+            {
+                this.position = pos;
+                this.posCoords = coords;
+            }
         }
     }
 }

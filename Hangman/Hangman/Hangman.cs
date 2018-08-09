@@ -1,69 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Hangman
+﻿namespace Hangman
 {
-    class Program
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading;
+
+    public class HangmanGame
     {
-        static void Main(string[] args)
+        static void Main()
         {
             int tries = 8;
             Random rnd = new Random();
             string[] dictionary = File.ReadAllLines("wordsEn.txt");
             List<char> wordToFind = new List<char>(dictionary[rnd.Next(0, dictionary.Length - 1)]);
-            Console.WriteLine(string.Join("", wordToFind.ToArray()));
+            Console.WriteLine(string.Join(string.Empty, wordToFind.ToArray()));
             int distinctChars = wordToFind.Distinct().Count();
             char charToSearch;
-
-            //Console.WriteLine("Моля въведете дума:");
-            //List<char> wordToFind = new List<char>(Console.ReadLine());
-            //while (wordToFind.Count == 0 || wordToFind.All(char.IsLetter)==false)
-            //{
-            //    Console.Clear();
-            //    Console.WriteLine("Моля въведете валидна дума:");
-            //    wordToFind = Console.ReadLine().ToList<char>();
-            //}
-            //Console.Clear();
 
             List<char> used = new List<char>();
             List<char> guessed = new List<char>();
             string endMessage;
 
-            //game loop
+            // game loop
             while (true)
             {
-                //interface
+                // interface
                 DrawInterface(tries, wordToFind, used, guessed);
 
-                //input validation
+                // input validation
                 charToSearch = Validation(used);
 
                 used.Add(charToSearch);
                 if (wordToFind.Contains(charToSearch))
                 {
                     guessed.Add(charToSearch);
-                    //win condition
+
+                    // win condition
                     if (guessed.Count == distinctChars)
                     {
-                        endMessage = "Браво, успяхте да познаете думата:" + string.Join("", wordToFind.ToArray());
-                        //Console.Clear();
+                        endMessage = "Браво, успяхте да познаете думата:" + string.Join(string.Empty, wordToFind.ToArray());
+                        ////Console.Clear();
                         break;
                     }
                 }
                 else
                 {
                     tries--;
-                    //loss
+
+                    // loss
                     if (tries == 0)
                     {
-                        endMessage = "Опитите ви свършиха думата беше: " + string.Join("", wordToFind.ToArray());
-                        //Console.Clear();
+                        endMessage = "Опитите ви свършиха думата беше: " + string.Join(string.Empty, wordToFind.ToArray());
+                        ////Console.Clear();
                         break;
                     }
                 }
@@ -80,13 +69,15 @@ namespace Hangman
             {
                 charToSearch = Console.ReadKey(true).KeyChar;
                 Console.Write(charToSearch);
-                Thread.Sleep(300);  //added for clarity
-                if ((charToSearch >= 97 && charToSearch <= 122) && !used.Contains(charToSearch))//ASCII a-z
+                Thread.Sleep(300);  // added for clarity
+                if ((charToSearch >= 97 && charToSearch <= 122) && !used.Contains(charToSearch)) // ASCII a-z
                 {
                     break;
                 }
                 else
+                {
                     Console.Write("\nВъведената буква е невалидна или вече използвана, моля опитайте отново: ");
+                }
             }
 
             return charToSearch;
@@ -107,6 +98,7 @@ namespace Hangman
                     Console.Write("_ ");
                 }
             }
+
             Console.WriteLine("\n");
             Console.WriteLine("Оставащи опити: " + tries);
             DrawingNoose(tries);
@@ -115,6 +107,7 @@ namespace Hangman
             {
                 Console.Write(x + " ");
             }
+
             Console.WriteLine("\n");
             Console.Write("Въведете буква:");
         }

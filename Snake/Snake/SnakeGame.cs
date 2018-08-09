@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Snake
+﻿namespace Snake
 {
-    class Program
-    {
-        public static bool isGameOver = false;
-        public static Random rng = new Random();
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
 
-        public static int score = 0;
-        public static int speed = 100;
+    public class SnakeGame
+    {
+        private static bool isGameOver = false;
+        private static Random rng = new Random();
+
+        private static int score = 0;
+        private static int speed = 100;
 
         static void Main()
         {
@@ -29,11 +26,11 @@ namespace Snake
             WelcomeMessage();
             DrawBoarder();
 
-            //Game Loop
+            // Game Loop
             while (!isGameOver)
             {
                 ResetWindowSize();
-                Console.ForegroundColor = ConsoleColor.Black; //just so you cant write in the console
+                Console.ForegroundColor = ConsoleColor.Black; // just so you cant write in the console
                 Input(direction);
                 rock.Update(snake, apple);
                 apple.Update(snake, rock);
@@ -53,7 +50,7 @@ namespace Snake
             Console.SetCursorPosition(18, 8);
             Console.WriteLine("Your Score: " + score);
 
-            //for replay
+            // for replay
             Console.SetCursorPosition(17, 10);
             Console.WriteLine("Replay ? (Y / N)");
             ConsoleKeyInfo key = Console.ReadKey();
@@ -69,7 +66,7 @@ namespace Snake
                 Console.Clear();
                 Main();
             }
-            else 
+            else
             {
                 return;
             }
@@ -94,7 +91,7 @@ namespace Snake
             Console.BufferHeight = Console.WindowHeight = 30;
         }
 
-        static void Input(Coords direction)
+        private static void Input(Coords direction)
         {
             if (Console.KeyAvailable)
             {
@@ -122,7 +119,7 @@ namespace Snake
             }
         }
 
-        static int ChangeSpeed(int score, int speed)
+        private static int ChangeSpeed(int score, int speed)
         {
             switch (score)
             {
@@ -131,26 +128,30 @@ namespace Snake
                         speed = 100;
                         break;
                     }
+
                 case 5:
                     {
                         speed = 80;
                         break;
                     }
+
                 case 10:
                     {
                         speed = 65;
                         break;
                     }
+
                 case 20:
                     {
                         speed = 50;
                         break;
                     }
             }
+
             return speed;
         }
 
-        static void DrawBoarder()
+        private static void DrawBoarder()
         {
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             for (int i = 1; i < Console.WindowWidth - 1; i++)
@@ -160,6 +161,7 @@ namespace Snake
                 Console.SetCursorPosition(i, Console.WindowHeight - 2);
                 Console.Write(' ');
             }
+
             for (int i = 1; i < Console.WindowHeight - 1; i++)
             {
                 Console.SetCursorPosition(1, i);
@@ -167,138 +169,148 @@ namespace Snake
                 Console.SetCursorPosition(Console.WindowWidth - 2, i);
                 Console.Write(' ');
             }
+
             Console.ResetColor();
         }
 
         public class Apple
         {
-            char apple = '@';
-            public Coords appleCoords;
-            public bool exists = false;
-            int timeSinceLastSpawn = Environment.TickCount;
-            int respawnTime = 5000;
+            public Coords AppleCoords;
+            public bool Exists = false;
+            private const char APPLE = '@';
+            private int timeSinceLastSpawn = Environment.TickCount;
+            private int respawnTime = 5000;
 
             public Apple()
             {
-                appleCoords = new Coords(0, 0);
-                exists = false;
+                this.AppleCoords = new Coords(0, 0);
+                this.Exists = false;
             }
 
             public void Draw()
             {
-                if (exists)
+                if (this.Exists)
                 {
-                    Console.SetCursorPosition(appleCoords.x, appleCoords.y);
+                    Console.SetCursorPosition(this.AppleCoords.x, this.AppleCoords.y);
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(apple);
+                    Console.Write(APPLE);
                     Console.ResetColor();
                 }
             }
 
             public void Delete()
             {
-                if (exists)
+                if (this.Exists)
                 {
-                    Console.SetCursorPosition(appleCoords.x, appleCoords.y);
+                    Console.SetCursorPosition(this.AppleCoords.x, this.AppleCoords.y);
                     Console.WriteLine(" ");
                 }
             }
 
             public void Update(Snake snake, Rocks rock)
             {
-                if (timeSinceLastSpawn + respawnTime < Environment.TickCount)
+                if (this.timeSinceLastSpawn + this.respawnTime < Environment.TickCount)
                 {
                     do
                     {
-                        appleCoords.x = rng.Next(2, Console.WindowWidth - 2);
-                        appleCoords.y = rng.Next(2, Console.WindowHeight - 2);
+                        this.AppleCoords.x = rng.Next(2, Console.WindowWidth - 2);
+                        this.AppleCoords.y = rng.Next(2, Console.WindowHeight - 2);
                     }
-                    while (CollideswithElements(snake, rock));
-                    timeSinceLastSpawn = Environment.TickCount;
+                    while (this.CollideswithElements(snake, rock));
+                    this.timeSinceLastSpawn = Environment.TickCount;
                 }
             }
 
             public bool CollideswithElements(Snake snake, Rocks rock)
             {
                 bool flag = false;
-                for (int i = 0; i < snake.snakeBody.Count; i++)
+                for (int i = 0; i < snake.SnakeBody.Count; i++)
                 {
-                    if (appleCoords.equalCoords(snake.snakeBody[i]))
+                    if (this.AppleCoords.EqualCoords(snake.SnakeBody[i]))
                     {
                         flag = true;
                         break;
                     }
                 }
+
                 if (flag == false)
                 {
-                    for (int i = 0; i < rock.allRocks.Count; i++)
+                    for (int i = 0; i < rock.AllRocks.Count; i++)
                     {
-                        if (appleCoords.equalCoords(rock.allRocks[i]))
+                        if (this.AppleCoords.EqualCoords(rock.AllRocks[i]))
                         {
                             flag = true;
                             break;
                         }
                     }
                 }
-                exists = true;
+
+                this.Exists = true;
                 return flag;
             }
         }
 
         public class Rocks
         {
-            char rock = 'R';
-            public Coords rockCoords;
-            public List<Coords> allRocks;
-            int timeSinceLastSpawn = Environment.TickCount;
-            int respawnTime = 12000;
+            public Coords RockCoords;
+            public List<Coords> AllRocks;
+            private const char ROCK = 'R';
+            private int timeSinceLastSpawn = Environment.TickCount;
+            private int respawnTime = 12000;
 
             public Rocks()
             {
-                allRocks = new List<Coords>();
-                rockCoords = new Coords(
+                this.AllRocks = new List<Coords>();
+                this.RockCoords = new Coords(
                     rng.Next(2, Console.WindowWidth - 2),
                     rng.Next(2, Console.WindowHeight - 2));
-                allRocks.Add(new Coords(
-                    rockCoords.x, rockCoords.y));
+                this.AllRocks.Add(new Coords(
+                    this.RockCoords.x, this.RockCoords.y));
             }
 
             public void Draw()
             {
-                Console.SetCursorPosition(rockCoords.x, rockCoords.y);
+                Console.SetCursorPosition(this.RockCoords.x, this.RockCoords.y);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write(rock);
+                Console.Write(ROCK);
                 Console.ResetColor();
             }
 
             public void Update(Snake snake, Apple apple)
             {
-                if (timeSinceLastSpawn + respawnTime < Environment.TickCount)
+                if (this.timeSinceLastSpawn + this.respawnTime < Environment.TickCount)
                 {
                     do
                     {
-                        rockCoords.x = rng.Next(2, Console.WindowWidth - 2);
-                        rockCoords.y = rng.Next(2, Console.WindowHeight - 2);
+                        this.RockCoords.x = rng.Next(2, Console.WindowWidth - 2);
+                        this.RockCoords.y = rng.Next(2, Console.WindowHeight - 2);
                     }
-                    while (CollideswithElements(snake, apple));
-                    timeSinceLastSpawn = Environment.TickCount;
+                    while (this.CollideswithElements(snake, apple));
+                    this.timeSinceLastSpawn = Environment.TickCount;
                 }
             }
 
             public bool CollideswithElements(Snake snake, Apple apple)
             {
-                if (rockCoords.equalCoords(apple.appleCoords))
+                if (this.RockCoords.EqualCoords(apple.AppleCoords))
                 {
-                    for (int i = 0; i < snake.snakeBody.Count; i++)
+                    for (int i = 0; i < snake.SnakeBody.Count; i++)
                     {
-                        if (rockCoords.equalCoords(snake.snakeBody[i]))
+                        if (this.RockCoords.EqualCoords(snake.SnakeBody[i]))
                         {
-                            return true;
+                            for (int y = 0; y < this.AllRocks.Count; y++)
+                            {
+                                if (this.RockCoords.EqualCoords(this.AllRocks[y]))
+                                {
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }
-                allRocks.Add(new Coords(
-                    rockCoords.x, rockCoords.y));
+
+                this.AllRocks.Add(new Coords(
+                    this.RockCoords.x, this.RockCoords.y));
                 return false;
             }
         }
@@ -314,62 +326,40 @@ namespace Snake
                 this.y = Y;
             }
 
-            //public void Add(Coords newCoords)
-            //{
-            //    x = newCoords.x;
-            //    y = newCoords.y;
-            //}
-
-            public bool equalCoords(Coords newCoords)
+            public bool EqualCoords(Coords newCoords)
             {
-                return x == newCoords.x &&
-                    y == newCoords.y;
+                return this.x == newCoords.x &&
+                    this.y == newCoords.y;
             }
         }
 
         public class Snake
         {
-            public List<Coords> snakeBody;
+            public List<Coords> SnakeBody;
 
             public Snake()
             {
                 Coords snakeHeadRng = new Coords(rng.Next(2, Console.WindowWidth - 2), rng.Next(2, Console.WindowHeight - 8));
-                snakeBody = new List<Coords>
+                this.SnakeBody = new List<Coords>
                 {
                     snakeHeadRng,
-                    new Coords(snakeHeadRng.x,snakeHeadRng.y+1),
-                    new Coords(snakeHeadRng.x,snakeHeadRng.y+2),
-                    new Coords(snakeHeadRng.x,snakeHeadRng.y+3),
-                    new Coords(snakeHeadRng.x,snakeHeadRng.y+4)
+                    new Coords(snakeHeadRng.x, snakeHeadRng.y + 1),
+                    new Coords(snakeHeadRng.x, snakeHeadRng.y + 2),
+                    new Coords(snakeHeadRng.x, snakeHeadRng.y + 3),
+                    new Coords(snakeHeadRng.x, snakeHeadRng.y + 4)
                 };
             }
 
             public void Draw(Coords direction)
             {
-                char head = ' ';
-                //if (direction.x == 1)
-                //{
-                //    head = '>';
-                //}
-                //if (direction.x == -1)
-                //{
-                //    head = '<';
-                //}
-                //if (direction.y == 1)
-                //{
-                //    head = 'V';
-                //}
-                //if (direction.y == -1)
-                //{
-                //    head = '^';
-                //}
-                Console.SetCursorPosition(snakeBody[0].x, snakeBody[0].y);
+                const char HEAD = ' ';
+                Console.SetCursorPosition(this.SnakeBody[0].x, this.SnakeBody[0].y);
                 Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write(head);
+                Console.Write(HEAD);
                 Console.ResetColor();
-                for (int i = 1; i < snakeBody.Count; i++)
+                for (int i = 1; i < this.SnakeBody.Count; i++)
                 {
-                    Console.SetCursorPosition(snakeBody[i].x, snakeBody[i].y);
+                    Console.SetCursorPosition(this.SnakeBody[i].x, this.SnakeBody[i].y);
                     Console.BackgroundColor = ConsoleColor.DarkRed;
                     Console.Write(' ');
                     Console.ResetColor();
@@ -378,23 +368,23 @@ namespace Snake
 
             public void Delete()
             {
-                for (int i = 0; i < snakeBody.Count; i++)
+                for (int i = 0; i < this.SnakeBody.Count; i++)
                 {
-                    Console.SetCursorPosition(snakeBody[i].x, snakeBody[i].y);
+                    Console.SetCursorPosition(this.SnakeBody[i].x, this.SnakeBody[i].y);
                     Console.Write(" ");
                 }
             }
 
             public void Update(Coords direction, Apple apple, Rocks rock)
             {
-                for (int i = snakeBody.Count - 1; i > 0; i--)
+                for (int i = this.SnakeBody.Count - 1; i > 0; i--)
                 {
-                    snakeBody[i].x = snakeBody[i - 1].x;
-                    snakeBody[i].y = snakeBody[i - 1].y;
+                    this.SnakeBody[i].x = this.SnakeBody[i - 1].x;
+                    this.SnakeBody[i].y = this.SnakeBody[i - 1].y;
                 }
-                //this.snakeBody[0].Add(direction);
-                snakeBody[0].x += direction.x;
-                snakeBody[0].y += direction.y;
+
+                this.SnakeBody[0].x += direction.x;
+                this.SnakeBody[0].y += direction.y;
 
                 ////to end if snake hits a wall
                 //if (snakeBody[0].x<1|| 
@@ -406,44 +396,46 @@ namespace Snake
                 //}
 
                 //to pass through walls
-                if (snakeBody[0].x == Console.BufferWidth - 2)
+                if (this.SnakeBody[0].x == Console.BufferWidth - 2)
                 {
-                    snakeBody[0].x = 2;
-                }
-                if (snakeBody[0].y == Console.BufferHeight - 2)
-                {
-                    snakeBody[0].y = 2;
-                }
-                if (snakeBody[0].x == 1)
-                {
-                    snakeBody[0].x = Console.BufferWidth - 3;
-                }
-                if (snakeBody[0].y == 1)
-                {
-                    snakeBody[0].y = Console.BufferHeight - 3;
+                    this.SnakeBody[0].x = 2;
                 }
 
-                //apple collision
-                if (snakeBody[0].equalCoords(apple.appleCoords))
+                if (this.SnakeBody[0].y == Console.BufferHeight - 2)
                 {
-                    EatApple(apple);
+                    this.SnakeBody[0].y = 2;
                 }
 
-                //rock collision
-                for (int i = 0; i < rock.allRocks.Count; i++)
+                if (this.SnakeBody[0].x == 1)
                 {
-                    if (snakeBody[0].equalCoords(rock.allRocks[i]))
+                    this.SnakeBody[0].x = Console.BufferWidth - 3;
+                }
+
+                if (this.SnakeBody[0].y == 1)
+                {
+                    this.SnakeBody[0].y = Console.BufferHeight - 3;
+                }
+
+                // apple collision
+                if (this.SnakeBody[0].EqualCoords(apple.AppleCoords))
+                {
+                    this.EatApple(apple);
+                }
+
+                // rock collision
+                for (int i = 0; i < rock.AllRocks.Count; i++)
+                {
+                    if (this.SnakeBody[0].EqualCoords(rock.AllRocks[i]))
                     {
                         isGameOver = true;
                         break;
                     }
                 }
 
-
-                //tail collison
-                for (int i = 1; i < snakeBody.Count; i++)
+                // tail collison
+                for (int i = 1; i < this.SnakeBody.Count; i++)
                 {
-                    if (snakeBody[0].equalCoords(snakeBody[i]))
+                    if (this.SnakeBody[0].EqualCoords(this.SnakeBody[i]))
                     {
                         isGameOver = true;
                         break;
@@ -453,10 +445,10 @@ namespace Snake
 
             public void EatApple(Apple apple)
             {
-                snakeBody.Add(new Coords(
-                    snakeBody[snakeBody.Count - 1].x,
-                    snakeBody[snakeBody.Count - 1].y));
-                apple.exists = false;
+                this.SnakeBody.Add(new Coords(
+                    this.SnakeBody[this.SnakeBody.Count - 1].x,
+                    this.SnakeBody[this.SnakeBody.Count - 1].y));
+                apple.Exists = false;
                 score++;
             }
         }
